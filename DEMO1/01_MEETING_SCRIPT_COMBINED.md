@@ -1,6 +1,6 @@
 # YOUR MEETING SCRIPT — Read This Line by Line During the Call
 
-> **What is this meeting?** A 60-minute practice drill (like a fire drill) where the team
+> **What is this meeting?** A 30-minute practice drill (like a fire drill) where the team
 > discusses two fake emergency scenarios. No real systems will be changed.
 >
 > **Why are we doing this?** To pass our SOC 2 security audit before October 30.
@@ -33,20 +33,20 @@
 SRE Tabletop Exercise for work item AB#34970. This is to provide evidence for
 our SOC 2 CC7 audit, which has a hard cutoff on October 30.
 
-The goal today is to walk through our newly drafted Incident Response Procedure
+Today goal  is to walk through our newly drafted Incident Response Procedure
 (version 1.0) on the DEMO environment, and test our team's response from the
 moment we detect a problem, all the way to verifying that things are fixed.
 
 This is purely a discussion exercise. No live changes will be made to any systems.
 
-For this simulation, our team roles are:
+**For this simulation, our team roles are:**
 
 - Primary Responder: Dipak Singh (that is me).
 - Backup Responder: Constantin Pricochi.
 - Incident Commander: Maurice Kennedy.
 - Security Escalation: Maurice Kennedy and Constantin Pricochi together.
 
-Our escalation rules are:
+**Our escalation rules are:**
 - If the Primary Responder does not respond to an alert within 15 minutes for a
   critical incident, or 30 minutes for a major incident, the Backup Responder
   (Constantin) steps in immediately.
@@ -57,7 +57,7 @@ Our escalation rules are:
 
 I will facilitate the discussion and capture our notes live on screen.
 
-We will walk through two scenarios today:
+**We will walk through two scenarios today:**
 1. An app gateway error surge (our APIM service throwing 5xx errors).
 2. A Key Vault security alert (unauthorized access attempts).
 
@@ -77,23 +77,24 @@ Let us begin with Scenario A."
 
 "Suppose at the start of our scenario, an automated alert fires in our Slack channel #helios-demo-alerts.
 
-The alert says: 'helios-dm0-gateway-failure-rate' — 42 percent of incoming
+The alert says: 'helios-dm0-gateway-failure-rate' — 42% of incoming
 requests on our APIM gateway are failing with server errors (HTTP 5xx) over the
-last 15 minutes. Our threshold for this alert is 10 percent, so 42 percent is
+last 15 minutes. Our threshold for this alert is 10%, so 42% is
 well above the danger line.
 
 Let us walk through how we respond to this step by step.
 
 **Step 1 — Who responded to the alert?**
 
-As Primary Responder, I acknowledge the alert in Slack. I add the 👀 reaction
+As Primary Responder, I acknowledge the alert in Slack. I Will add the 👀 reaction
 and post:
 'ACKNOWLEDGED by Dipak Singh. Opening triage bridge. Declaring this a
 Severity 2 (Major) incident.'
-We record my name and the current timestamp live in our notes.
+
+("We record my name and the current timestamp live in our notes".)
 
 Constantin, as backup, per our procedure — if I had not responded within 15
-minutes, you would have stepped in immediately. Does that make sense?"
+minutes, Then you would have stepped in immediately. Does that make sense?"
 
 > Pause for Constantin to confirm. Then continue:
 
@@ -101,7 +102,7 @@ minutes, you would have stepped in immediately. Does that make sense?"
 
 Next, I open Azure DevOps and create a new incident task live as a child under
 our parent story AB#34970 in the Helios QRE project. I tag it as 'incident' and
-'sev-2'. We leave the ticket number blank in advance and write down the new
+'Severity-2'. We leave the ticket number blank in advance and write down the new
 ticket ID live as soon as it is generated."
 
 > ╔══════════════════════════════════════════════════════════════════════════════╗
@@ -115,7 +116,7 @@ ticket ID live as soon as it is generated."
 
 > **On your shared screen:** Fill in the Scenario A section of the Live Notes:
 > - Who responded: Dipak Singh [record live time]
-> - Incident record: [Enter new child Task ID created under AB#34970], Severity 2
+> - Incident record: [Enter new child Task ID created under AB#34970], Severityerityerity 2
 
 "**Step 3 — Investigation and finding the root cause.**"
 
@@ -153,7 +154,7 @@ fixed. We run a 4-point verification checklist:
 4. **Sign-off:** I post the recovery proof into Slack and mark the incident
    record as Resolved in Azure DevOps.
 
-Does everyone agree this checklist is sufficient for closing a Severity 2
+Does everyone agree this checklist is sufficient for closing a Severityerity 2
 incident?"
 
 > Let the team discuss. If they suggest additions, note them on the shared screen.
@@ -186,8 +187,9 @@ to access one of our stored passwords.
 
 I acknowledge immediately in Slack. Because this involves credentials and
 unauthorized access to our Key Vault, our procedure requires an immediate
-joint escalation to both Maurice and Constantin. We note the live acknowledgment
-time in our meeting notes."
+joint escalation to both Maurice and Constantin. 
+
+"(We note the live acknowledgment time in our meeting notes)."
 
 > **On your shared screen:** Fill in the Scenario B section:
 > - Who responded: Dipak Singh [record live time]
@@ -196,7 +198,7 @@ time in our meeting notes."
 "**Step 2 — Creating the incident record.**
 
 Next, we open Azure DevOps and create a new child task live under AB#34970,
-tagged as 'security', 'sev-1' (Critical), and 'soc2-cc7'. We write down the
+tagged as 'security', 'Severity-1' (Critical), and 'soc2-cc7'. We write down the
 new ticket number here as soon as it is created. This is tagged as Severity 1
 because any unauthorized credential access is automatically Critical under our
 procedure.
@@ -210,7 +212,7 @@ procedure.
 > ║ 4. Click: "Save & Close" -> Type the new AB# ID into your Live Notes!        ║
 > ╚══════════════════════════════════════════════════════════════════════════════╝
 
-**Step 3 — Containment actions (stopping the attacker).**
+**Step 3 — Prevention actions (stopping the attacker).**
 
 We take three actions at the same time:
 
@@ -296,7 +298,7 @@ new joins the team, they need to find this information easily.
 **Action Item 2** (Owner: Dipak):
 Create a formal Severity Classification guide. Today we classified the
 APIM issue as Severity 2 even though 42 percent of requests were failing.
-We need clear, written rules for when something is Severity 1 versus
+We need clear, written rules for when something is Severityerityerity 1 versus
 Severity 2, so there is no guessing during a real incident.
 
 **Action Item 3** (Owner: Aditya):
@@ -385,8 +387,8 @@ link them under AB#34970 right after this call."
 | **Managed Identity / Workload Identity** | A more secure way for apps to connect to Azure services without storing passwords. Azure manages the credentials automatically. |
 | **Entra ID** | Microsoft's identity management system (formerly called Azure Active Directory). Where we manage users, apps, and permissions. |
 | **Helm / GitOps** | Tools used to deploy and update our applications. "Rollback" means undoing the last update to go back to a working version. |
-| **Sev 1 (Critical)** | The most serious type of incident. Customer-facing outage, data breach, or credential compromise. Must respond within 15 minutes. |
-| **Sev 2 (Major)** | Serious but not catastrophic. A component is failing but the whole system is not down. Must respond within 30 minutes. |
+| **Severity 1 (Critical)** | The most serious type of incident. Customer-facing outage, data breach, or credential compromise. Must respond within 15 minutes. |
+| **Severity 2 (Major)** | Serious but not catastrophic. A component is failing but the whole system is not down. Must respond within 30 minutes. |
 | **SOC 2 CC7** | A security compliance standard. CC7 specifically covers how a company detects, responds to, and recovers from incidents. |
 | **Post-Incident Review (PIR)** | A "lessons learned" meeting held after an incident is resolved. We discuss what happened, what worked, and what to improve. |
 | **VNet** | Virtual Network — our private, isolated network inside Azure. Only trusted services inside this network can talk to each other. |

@@ -1,8 +1,9 @@
-# LIVE NOTES TEMPLATE — Share This On Screen During the Call
+# LIVE NOTES REFERENCE — Fully Filled Example
 
-> **INSTRUCTIONS:** Share this file on your screen during the meeting.
-> Fill in the blanks and tick the checkboxes LIVE as the team discusses each point.
-> Leave everything empty before the call starts.
+> **HOW TO USE THIS FILE:**
+> Keep this open on your side (private screen) as a cheat sheet while you type notes on your shared screen.
+> It shows you the exact words, timestamps, and numbers to type into `02_LIVE_NOTES_TEMPLATE.md` during the call.
+> It is aligned with your swapped roles: **Maurice = Incident Commander**, **Constantin = Backup Responder**.
 
 ---
 
@@ -20,141 +21,139 @@
 
 | Role | Name | Contact |
 |---|---|---|
-| **Incident Commander** | _______________ | Slack: _______________ |
-| **Primary Responder (Facilitator)** | _______________ | Slack: _______________ |
-| **Backup Responder** | _______________ | Slack: _______________ |
-| **Investigation Engineer** | _______________ | Slack: _______________ |
-| **Security Escalation Lead** | _______________ | Slack: _______________ |
+| **Incident Commander** | Maurice Kennedy | Slack: `@Maurice Kennedy` |
+| **Primary Responder (Facilitator)** | Dipak Singh | Slack: `@Dipak Singh` |
+| **Backup Responder** | Constantin Pricochi | Slack: `@Constantin Pricochi` |
+| **Investigation Engineer** | Aditya Mehta | Slack: `@Aditya Mehta` |
+| **Security Escalation Lead** | Maurice Kennedy & Constantin Pricochi | Slack: `#security-ops` |
 
 ---
 
 ## 2. Scenario A: App Gateway Error Surge (Reliability Incident)
 
-**Incident ID:** _______________
-**Incident Record (Azure DevOps ticket):** _______________ *(Copy content from Ticket_1_APIM_5xx.md as Child Task under AB#34970)*
-**Severity Level:** _______________
+**Incident ID:** INC-20261022-DM0-APIM  
+**Incident Record (Azure DevOps ticket):** [New Child Task under AB#34970 - Created live during meeting]  
+**Severity Level:** Sev 2 (Major Service Degradation)  
 
 ### Who responded to the alert?
 
-- **Responded by:** _______________
-- **Time of response:** _______________ UTC
-- **How they responded:** _______________
-- **Backup responder (if Primary did not respond):** _______________
+- **Responded by:** Dipak Singh (Primary Responder)
+- **Time of response:** 10:20 UTC (2 minutes after detection)
+- **How they responded:** Added 👀 emoji reaction and posted acknowledgment in `#helios-demo-alerts` Slack channel
+- **Backup responder (if Primary did not respond):** Constantin Pricochi (would step in if no ack within 15 mins)
 
 ### Timeline of Events:
 
 | Time (UTC) | What Happened | Who Did It |
 |---|---|---|
-| _____ | Alert fired: _________________________________ | System (automated) |
-| _____ | Alert acknowledged in Slack | _______________ |
-| _____ | Incident record created in Azure DevOps | _______________ |
-| _____ | Diagnostic investigation completed | _______________ |
-| _____ | Incident Commander authorized rollback | _______________ |
-| _____ | Rollback executed | _______________ |
+| 10:18 | Alert fired: `helios-dm0-gateway-failure-rate` (42% failure rate over 15m) | System (automated) |
+| 10:20 | Alert acknowledged in Slack; triage bridge opened | Dipak Singh |
+| 10:22 | Incident record AB#34974 created in Azure DevOps under `Helios\QRE` | Dipak Singh |
+| 10:32 | Diagnostic KQL query run in `helios-dm0-logs`; isolated issue | Aditya Mehta |
+| 10:45 | Incident Commander authorized rollback of `ontology-event-processor` | Maurice Kennedy |
+| 10:47 | Rollback executed to previous known-good deployment digest via GitOps | Constantin Pricochi |
+| 10:50 | 4-point recovery checklist executed and verified | Dipak Singh |
 
 ### Root Cause Found:
 
-- **Which service failed?** _______________
-- **What type of error?** _______________
-- **Was the failure isolated to one service or widespread?** _______________
+- **Which service failed?** `ontology-event-processor` container
+- **What type of error?** Upstream HTTP 504 gateway timeout (requests exceeding 30 seconds); `plan-narration` remained healthy
+- **Was the failure isolated to one service or widespread?** Isolated to single service (`ontology-event-processor`)
 
 ### Recovery Verification (4-Point Checklist):
 
-- [ ] **Metric check:** Error rate dropped from ___% to ___% and stayed stable for ___ minutes.
-- [ ] **Health check:** Health endpoint returned HTTP ___ in ___ms.
-- [ ] **Log check:** Diagnostic query confirmed ___ errors in the last ___ minutes.
-- [ ] **Sign-off:** Recovery evidence posted to Slack. Incident record marked as _______________.
+- [x] **Metric check:** Error rate dropped from 42% to 0.08% and stayed stable for > 15 minutes.
+- [x] **Health check:** Health endpoint `GET /ontology-event-processor/health` returned HTTP 200 OK in 48ms.
+- [x] **Log check:** Diagnostic query confirmed 0 gateway 504 timeout errors in the last 10 minutes.
+- [x] **Sign-off:** Recovery evidence posted to Slack. Incident record marked as Resolved on the new child task.
 
 ---
 
 ## 3. Scenario B: Key Vault Security Alert (Security Incident)
 
-**Incident ID:** _______________
-**Incident Record (Azure DevOps ticket):** _______________ *(Copy content from Ticket_2_KeyVault_Security.md as Child Task under AB#34970)*
-**Severity Level:** _______________
+**Incident ID:** INC-20261022-DM0-BACKEND-KV-SEC  
+**Incident Record (Azure DevOps ticket):** [New Child Task under AB#34970 - Created live during meeting]  
+**Severity Level:** Sev 1 (Critical Security / Credential Compromise)  
 
 ### Who responded to the alert?
 
-- **Responded by:** _______________
-- **Time of response:** _______________ UTC
-- **Escalated to:** _______________
-- **Reason for escalation:** _______________
+- **Responded by:** Dipak Singh (Primary Responder)
+- **Time of response:** 10:27 UTC (2 minutes after alert)
+- **Escalated to:** Maurice Kennedy and Constantin Pricochi
+- **Reason for escalation:** Unauthorized Key Vault secret access detected; mandatory joint escalation under Procedure v1.0
 
 ### Timeline of Events:
 
 | Time (UTC) | What Happened | Who Did It |
 |---|---|---|
-| _____ | Security alert fired from Microsoft Defender | System (automated) |
-| _____ | Alert acknowledged in Slack | _______________ |
-| _____ | Joint security escalation triggered | _______________ |
-| _____ | Incident record created in Azure DevOps | _______________ |
-| _____ | Diagnostic investigation completed | _______________ |
-| _____ | Compromised credential disabled | _______________ |
-| _____ | Key Vault firewall locked down | _______________ |
-| _____ | Secret rotated and services restarted | _______________ |
+| 10:25 | Security alert fired from Microsoft Defender for Cloud | System (automated) |
+| 10:27 | Alert acknowledged in Slack; security incident bridge activated | Dipak Singh |
+| 10:28 | Joint security escalation triggered to IC and Infra Lead | Dipak Singh |
+| 10:29 | Incident record created in Azure DevOps tagged `security`, `sev-1` as Child Task | Dipak Singh |
+| 10:35 | Diagnostic query in `AzureDiagnostics` identified leaked Service Principal | Aditya Mehta |
+| 10:42 | Compromised Service Principal credential disabled and deleted in Entra ID | Constantin Pricochi |
+| 10:43 | Key Vault firewall updated to restrict public access to trusted VNets | Dipak Singh |
+| 10:44 | Secret `redis-cache-connection` rotated; dependent workloads restarted | Dipak Singh |
+| 10:52 | 4-point security recovery checklist executed and verified | Dipak Singh |
+| 10:55 | Formal security sign-off and closure approved | Maurice Kennedy |
 
 ### Attacker Details:
 
-- **Attacker IP address:** _______________
-- **Number of unauthorized attempts:** _______________
-- **Targeted secret name:** _______________
-- **How the credential was compromised:** _______________
+- **Attacker IP address:** `198.51.100.44`
+- **Number of unauthorized attempts:** 18 attempts (HTTP 403 Forbidden) within 5 minutes
+- **Targeted secret name:** `redis-cache-connection`
+- **How the credential was compromised:** Leaked/expired Service Principal credential attempted from untrusted external IP
 
 ### Containment Actions Taken:
 
-- [ ] Compromised Service Principal credential disabled and deleted in Entra ID.
-- [ ] Key Vault firewall restricted to trusted internal networks only.
-- [ ] Targeted secret rotated (new password generated).
-- [ ] Dependent services restarted with the new secret.
+- [x] Compromised Service Principal credential disabled and deleted in Entra ID.
+- [x] Key Vault firewall restricted to trusted internal networks only.
+- [x] Targeted secret rotated (new password generated).
+- [x] Dependent services restarted with the new secret.
 
 ### Recovery Verification (4-Point Checklist):
 
-- [ ] **Audit log check:** Confirmed ___ requests from attacker IP in the last ___ minutes.
-- [ ] **Service health check:** Legitimate services authenticated with new secret (HTTP ___).
-- [ ] **Defender status:** Microsoft Defender marked incident as _______________.
-- [ ] **Security sign-off:** _______________ reviewed audit evidence and approved closure.
+- [x] **Audit log check:** Confirmed 0 requests from attacker IP (`198.51.100.44`) in the last 30 minutes.
+- [x] **Service health check:** Legitimate services authenticated with new secret via Workload Identity (HTTP 200 OK).
+- [x] **Defender status:** Microsoft Defender marked incident as *Mitigated — Credential Rotated & Network Isolated*.
+- [x] **Security sign-off:** Maurice Kennedy reviewed audit evidence and approved closure at 10:55 UTC.
 
 ### Additional Security Checks (if discussed):
 
-- [ ] Checked if the attacker IP hit any other Azure resources: _______________
-- [ ] Checked Entra ID sign-in logs for the compromised Service Principal: _______________
-- [ ] Checked threat intelligence feeds for the attacker IP: _______________
-- [ ] CISO notification required? _______________
+- [x] Checked if the attacker IP hit any other Azure resources: Zero attempts found in NSG/Firewall logs.
+- [x] Checked Entra ID sign-in logs for the compromised Service Principal: No access to other enterprise apps found.
+- [x] Checked threat intelligence feeds for the attacker IP: IP noted in threat feeds; blocked at perimeter.
+- [x] CISO notification required? Evaluated with Incident Commander; DEMO environment isolation confirmed, internal security escalation logged.
 
 ---
 
 ## 4. What Went Well
 
-1. _______________________________________________________________
-2. _______________________________________________________________
-3. _______________________________________________________________
-4. _______________________________________________________________
-
-*(Add more rows as needed during the discussion.)*
+1. Fast initial response time: both alerts were acknowledged in Slack within 2 minutes of firing.
+2. Clear team role separation: no ambiguity between Incident Commander (Maurice), Backup (Constantin), and Primary Responder (Dipak).
+3. Evidence-based recovery: resolution was validated with KQL diagnostic queries and synthetic health checks rather than assumptions.
+4. Seamless security containment: rogue credential disabled and Key Vault firewall isolated in under 15 minutes from alert.
 
 ---
 
 ## 5. Gaps Found and Action Items
 
-> *(After the call, create these as Child Tasks under AB#34970 using files in `2_INDIVIDUAL_TICKETS/`)*
-
 | # | Action Item | Who is responsible? | Target date |
 |---|---|---|---|
-| 1 | _______________________________________ | _______________ | _______________ |
-| 2 | _______________________________________ | _______________ | _______________ |
-| 3 | _______________________________________ | _______________ | _______________ |
-| 4 | _______________________________________ | _______________ | _______________ |
-| 5 | _______________________________________ | _______________ | _______________ |
-| 6 | _______________________________________ | _______________ | _______________ |
+| 1 | Document SRE on-call rotation, backup rules, and escalation matrix in team Wiki | Maurice Kennedy | Sprint 2 (Nov 06, 2026) |
+| 2 | Publish formal Incident Severity Classification Rubric with quantitative Sev 1/2 thresholds | Dipak Singh | Sprint 2 (Nov 06, 2026) |
+| 3 | Embed runbook deep links and pre-populated KQL query links into Slack alert cards | Aditya Mehta | Sprint 2 (Nov 06, 2026) |
+| 4 | Automate Key Vault secret rotation via Event Grid + Functions and add public network deny alert | Constantin Pricochi | Sprint 2 (Nov 06, 2026) |
+| 5 | Establish external customer communication and status page notification protocol for Sev 1 incidents | Dipak Singh | Sprint 2 (Nov 06, 2026) |
 
 ---
 
 ## 6. Customer and Stakeholder Communication
 
-- **Was customer communication needed for either scenario?** _______________
-- **Who is responsible for customer notifications?** _______________
-- **Do we have a status page?** _______________
-- **Action item to improve this?** _______________
+- **Was customer communication needed for either scenario?** No, incidents occurred on DEMO environment (`dm0`). In a production equivalent, Sev 1 would trigger customer notification.
+- **Who is responsible for customer notifications?** Incident Commander (Maurice Kennedy) coordinates with Product/Support lead.
+- **Do we have a status page?** Identified as a gap to address in Action Item 5.
+- **Action item to improve this?** Logged as Action Item #5 above.
 
 ---
 
@@ -165,10 +164,10 @@ SRE Tabletop Exercise for SOC 2 CC7 audit compliance.
 
 | Name | Role | Confirmed (Yes/No) |
 |---|---|---|
-| Maurice Kennedy | Incident Commander | |
-| Constantin Pricochi | Backup Responder | |
-| Aditya Mehta | Investigation Engineer | |
-| Dipak Singh | Primary Responder / Facilitator | |
+| Maurice Kennedy | Incident Commander | Yes |
+| Constantin Pricochi | Backup Responder | Yes |
+| Aditya Mehta | Investigation Engineer | Yes |
+| Dipak Singh | Primary Responder / Facilitator | Yes |
 
 ---
 
